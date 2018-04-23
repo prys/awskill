@@ -14,7 +14,7 @@ for regionDetails in response['Regions']:
         print('Found instance ' + thisInstance + '    State = ' + thisState)
         if termProt and (thisState != 'terminated'):
             modResponse = ec2.modify_instance_attribute(Attribute='disableApiTermination', Value='False', InstanceId=thisInstance)
-            termResponse = ec2.terminate_instances(InstanceIds=[thisInstance])
+        termResponse = ec2.terminate_instances(InstanceIds=[thisInstance])
     natResponse = ec2.describe_nat_gateways()
     for natGWs in natResponse['NatGateways']:
         print('Found NAT G/W: ' + natGWs['NatGatewayId'] + '   State = ' + natGWs['State'])
