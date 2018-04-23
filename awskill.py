@@ -20,3 +20,5 @@ for regionDetails in response['Regions']:
         for natGWs in natResponse['NatGateways']:
             print(natGWs['NatGatewayId'])
             print(natGWs['State'])
+            if natGWs['State'] != 'deleted':
+                gwDel = ec2.delete_nat_gateway(NatGatewayId=natGWs['NatGatewayId'])
