@@ -12,9 +12,9 @@ for regionDetails in response['Regions']:
         thisState = ins['Instances'][0]['State']['Name']
         termProt = ec2.describe_instance_attribute(Attribute='disableApiTermination', InstanceId=thisInstance)
         print('Found instance ' + thisInstance + '    State = ' + thisState)
-        if termProt:
-            modResponse = ec2.modify_instance_attribute(Attribute='disableApiTermination', Value='False', InstanceId=thisInstance)
         if thisState != 'terminated':
+            if termProt:
+                modResponse = ec2.modify_instance_attribute(Attribute='disableApiTermination', Value='False', InstanceId=thisInstance)
             termResponse = ec2.terminate_instances(InstanceIds=[thisInstance])
     natResponse = ec2.describe_nat_gateways()
     for natGWs in natResponse['NatGateways']:
