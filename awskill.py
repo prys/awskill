@@ -7,14 +7,17 @@ for regionDetails in response['Regions']:
     print('Looking in region ' + regionDetails['RegionName'])
     ec2 = boto3.client('ec2', regionDetails['RegionName'])
     ec2Response = ec2.describe_instances()
-    for ins in ec2Response['Reservations']:
-        thisInstance = ins['Instances'][0]['InstanceId']
-        thisState = ins['Instances'][0]['State']['Name']
-        termProt = ec2.describe_instance_attribute(Attribute='disableApiTermination', InstanceId=thisInstance)
-        print('Found instance ' + thisInstance + '    State = ' + thisState)
-        if thisState != 'terminated':
-            if termProt:
-                modResponse = ec2.modify_instance_attribute(Attribute='disableApiTermination', Value='False', InstanceId=thisInstance)
+
+    for i in range(len(ec2Response['Reservations'])):
+        for x in range(len(ec2Response['Reservations'][i]['Instances'])):
+        #for ins in ec2Response['Reservations'][i]:
+            thisInstance = ec2Response['Reservations'][i]['Instances'][x]['InstanceId']
+            thisState = ec2Response['Reservations'][i]['Instances'][x]['State']['Name']
+            termProt = ec2.describe_instance_attribute(Attribute='disableApiTermination', InstanceId=thisInstance)
+            print('Found instance ' + thisInstance + '    State = ' + thisState)
+            if thisState != 'terminated':
+                if termProt:
+                    modResponse = ec2.modify_instance_attribute(Attribute='disableApiTermination', Value='False', InstanceId=thisInstance)
             termResponse = ec2.terminate_instances(InstanceIds=[thisInstance])
     natResponse = ec2.describe_nat_gateways()
     for natGWs in natResponse['NatGateways']:
