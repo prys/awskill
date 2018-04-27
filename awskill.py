@@ -10,7 +10,6 @@ for regionDetails in response['Regions']:
 
     for i in range(len(ec2Response['Reservations'])):
         for x in range(len(ec2Response['Reservations'][i]['Instances'])):
-        #for ins in ec2Response['Reservations'][i]:
             thisInstance = ec2Response['Reservations'][i]['Instances'][x]['InstanceId']
             thisState = ec2Response['Reservations'][i]['Instances'][x]['State']['Name']
             termProt = ec2.describe_instance_attribute(Attribute='disableApiTermination', InstanceId=thisInstance)
